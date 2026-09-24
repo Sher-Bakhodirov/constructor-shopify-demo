@@ -249,7 +249,7 @@
             "enable_default_styles": true,
             "version": "1.2.0",
             "index_key": "key_QXcSdast8nnuNbsp",
-            "options_json": "{}"
+            "options_json": "{callbacks: }"
           }
         }
       },
