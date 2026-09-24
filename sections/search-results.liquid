@@ -19,33 +19,7 @@
 ></div>
 
 {%- if settings.constructor_enabled and settings.constructor_search_enabled -%}
-  {% render 'constructor-results-styles' %}
-  <script src="{{ 'constructor-results.js' | asset_url }}" type="module" fetchpriority="low"></script>
-
-  <constructor-results
-    mode="search"
-    class="section spacing-style"
-    style="--padding-block-start: {{ section.settings.padding-block-start }}px; --padding-block-end: {{ section.settings.padding-block-end }}px;"
-  >
-    <div class="cnstrc-results cnstrc-results--with-facets">
-      <aside data-cnstrc-facets class="cnstrc-facets"></aside>
-      <div>
-        <div class="cnstrc-results__header">
-          <h1 data-cnstrc-title class="cnstrc-results__title">
-            {%- if search.terms != blank -%}
-              {{ 'content.search_results_for' | t: terms: search.terms | default: search.terms }}
-            {%- endif -%}
-          </h1>
-          <div class="cnstrc-results__toolbar">
-            <div data-cnstrc-sort></div>
-          </div>
-        </div>
-        <div data-cnstrc-status class="cnstrc-results__status" role="status" aria-live="polite"></div>
-        <div data-cnstrc-grid class="cnstrc-grid"></div>
-        <button type="button" data-cnstrc-load-more class="button cnstrc-load-more" hidden></button>
-      </div>
-    </div>
-  </constructor-results>
+  {% render 'constructor-plp', mode: 'search', section: section %}
 {%- else -%}
 
 <results-list

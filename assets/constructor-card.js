@@ -113,7 +113,7 @@ export function bindAddToCart(root) {
  * @param {HTMLElement} button
  * @param {string} variantId
  */
-function addVariantToCart(button, variantId) {
+export function addVariantToCart(button, variantId) {
   button.setAttribute('disabled', '');
   const original = button.textContent;
 

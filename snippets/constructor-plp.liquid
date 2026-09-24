@@ -1,0 +1,62 @@
+{% doc %}
+  Mount point for Constructor's PLP UI library (bundled build). The library renders
+  the whole results page (facets, groups, sort, pagination, cards) client-side into
+  this container; `assets/constructor-plp.js` mounts it with theme-specific config.
+
+  @param {string} mode - 'browse' or 'search'
+  @param {object} section - The parent section (spacing / products per page settings)
+  @param {string} [filter_name] - Browse filter name (group_id, collection_id or a facet)
+  @param {string} [filter_value] - Browse filter value
+
+  @example
+  {% render 'constructor-plp', mode: 'browse', section: section, filter_name: 'group_id', filter_value: collection.handle %}
+{% enddoc %}
+
+{%- liquid
+  assign results_per_page = 24
+  if section.settings.enable_infinite_scroll == false and section.settings.products_per_page != blank
+    assign results_per_page = section.settings.products_per_page
+  endif
+-%}
+
+<script>
+  window.ConstructorTheme = window.ConstructorTheme || {};
+  window.ConstructorTheme.plpTranslations = {
+    'Add to Cart': {{ 'actions.add_to_cart' | t | json }},
+    Filters: {{ 'content.filters' | t | json }},
+    'Show All': {{ 'actions.show_more' | t | json }},
+    'Show Less': {{ 'actions.show_less' | t | json }}
+  };
+</script>
+<script src="{{ 'constructor-plp.js' | asset_url }}" type="module" fetchpriority="low"></script>
+
+<div
+  class="section spacing-style{% if section.settings.background_color != blank %} color-custom-{{ section.id }}{% endif %}"
+  style="--padding-block-start: {{ section.settings.padding-block-start }}px; --padding-block-end: {{ section.settings.padding-block-end }}px;"
+>
+  <div
+    id="cio-plp-ui-container-{{ section.id }}"
+    class="constructor-plp"
+    data-cnstrc-plp
+    data-mode="{{ mode }}"
+    {% if filter_name != blank %}
+      data-filter-name="{{ filter_name | escape }}"
+    {% endif %}
+    {% if filter_value != blank %}
+      data-filter-value="{{ filter_value | escape }}"
+    {% endif %}
+    data-results-per-page="{{ results_per_page }}"
+  ></div>
+</div>
+
+{% stylesheet %}
+  .constructor-plp {
+    min-height: 60vh;
+  }
+
+  /* Inherit the theme's typography instead of the library's bundled Inter font. */
+  .constructor-plp .cio-plp {
+    font-family: var(--font-body--family, inherit);
+    color: var(--color-foreground, inherit);
+  }
+{% endstylesheet %}
