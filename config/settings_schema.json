@@ -2145,8 +2145,7 @@
         "type": "text",
         "id": "constructor_autotrack_url",
         "label": "Autotrack beacon script URL",
-        "info": "Your customer-specific data-driven tracking bundle from Constructor (e.g. https://cnstrc.com/js/cust/your-index_XXXXXX.js). Leave blank to skip loading it.",
-        "default": ""
+        "info": "Your customer-specific data-driven tracking bundle from Constructor (e.g. https://cnstrc.com/js/cust/your-index_XXXXXX.js). Leave blank to skip loading it."
       },
       {
         "type": "header",
@@ -2209,8 +2208,7 @@
       {
         "type": "text",
         "id": "constructor_pod_cart",
-        "label": "Cart pod ID",
-        "default": ""
+        "label": "Cart pod ID"
       },
       {
         "type": "text",
