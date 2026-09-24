@@ -1,0 +1,47 @@
+{% doc %}
+  Emits Constructor.io data-driven `data-cnstrc-item-*` attributes for a product.
+
+  Render on the element that represents a single item inside a tracked container
+  (search / browse / recommendations grid, PDP, autocomplete row). Constructor
+  reads these to attribute clicks and conversions back to the parent container.
+
+  Outputs nothing unless Constructor is enabled, so it is safe to render
+  unconditionally.
+
+  @param {object} product - The Shopify product object.
+  @param {variant} [variant] - Optional selected variant; defaults to the product's first available.
+  @param {string} [recommendation] - When present, marks the item as a recommendation
+    result and is used as the strategy id (data-cnstrc-item="recommendation").
+{% enddoc %}
+
+{%- liquid
+  unless settings.constructor_enabled
+    break
+  endunless
+
+  if product == blank or product.id == blank
+    break
+  endif
+
+  assign cnstrc_variant = variant | default: product.selected_or_first_available_variant
+
+  case settings.constructor_item_id_source
+    when 'variant_id'
+      assign cnstrc_item_id = cnstrc_variant.id
+    when 'handle'
+      assign cnstrc_item_id = product.handle
+    when 'sku'
+      assign cnstrc_item_id = cnstrc_variant.sku
+    else
+      assign cnstrc_item_id = product.id
+  endcase
+
+  assign cnstrc_price = cnstrc_variant.price | default: product.price | divided_by: 100.0
+-%}
+data-cnstrc-item-id="{{ cnstrc_item_id }}"
+data-cnstrc-item-name="{{ product.title | escape }}"
+data-cnstrc-item-variation-id="{{ cnstrc_variant.id }}"
+data-cnstrc-item-price="{{ cnstrc_price }}"
+{%- if recommendation != blank -%}
+  {{ ' ' }}data-cnstrc-item="recommendation" data-cnstrc-strategy-id="{{ recommendation | escape }}"
+{%- endif -%}

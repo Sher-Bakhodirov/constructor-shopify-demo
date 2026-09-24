@@ -39,6 +39,35 @@
     >
       {{ 'content.search' | t }}
     </h2>
+    {%- if settings.constructor_enabled and settings.constructor_autocomplete_enabled -%}
+      {% render 'constructor-autocomplete-styles' %}
+      <script src="{{ 'constructor-autocomplete.js' | asset_url }}" type="module" fetchpriority="low"></script>
+
+      <constructor-autocomplete class="predictive-search">
+        <form
+          action="{{ routes.search_url }}"
+          method="get"
+          role="search"
+          class="cnstrc-ac__form"
+          data-cnstrc-search-form
+        >
+          <label for="cnstrc-ac-input" class="visually-hidden">{{ 'content.search_input_label' | t }}</label>
+          <input
+            id="cnstrc-ac-input"
+            class="cnstrc-ac__input"
+            type="search"
+            name="q"
+            autocomplete="off"
+            placeholder="{{ 'content.search_input_placeholder' | t }}"
+            data-cnstrc-search-input
+          >
+          <button type="submit" class="button cnstrc-ac__submit" data-cnstrc-search-submit-btn aria-label="{{ 'content.search' | t }}">
+            <span class="svg-wrapper">{{ 'icon-search.svg' | inline_asset_content }}</span>
+          </button>
+        </form>
+        <div class="cnstrc-ac__dropdown" data-cnstrc-dropdown hidden></div>
+      </constructor-autocomplete>
+    {%- else -%}
     <predictive-search-component
       class="predictive-search color-custom-popover{% if class != blank %} {{ class | strip }}{% endif %}"
       style="--product-corner-radius: {{ settings.product_corner_radius | default: 8 | append: 'px' }}; --card-corner-radius: {{ settings.card_corner_radius | default: 8 | append: 'px' }};{% if settings.card_title_case == 'uppercase' %} --title-case: uppercase;{% endif %}"
@@ -137,6 +166,7 @@
         </div>
       </form>
     </predictive-search-component>
+    {%- endif -%}
   </dialog>
 </dialog-component>
 

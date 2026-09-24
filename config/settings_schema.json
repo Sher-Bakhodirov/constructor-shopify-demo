@@ -2116,5 +2116,129 @@
         "default": "equal-width-buttons"
       }
     ]
+  },
+  {
+    "name": "Constructor.io",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Connection"
+      },
+      {
+        "type": "paragraph",
+        "content": "Powers search, autocomplete, browse and recommendations with Constructor, and enables data-driven behavioral tracking. Enter the API (index) key for your Constructor index — this key is safe to expose publicly. Never paste an API token here."
+      },
+      {
+        "type": "checkbox",
+        "id": "constructor_enabled",
+        "label": "Enable Constructor.io",
+        "default": false
+      },
+      {
+        "type": "text",
+        "id": "constructor_index_key",
+        "label": "API (index) key",
+        "info": "Constructor dashboard → Integration. Looks like key_XXXXXXXXXXXXXXXX.",
+        "default": "key_QXcSdast8nnuNbsp"
+      },
+      {
+        "type": "text",
+        "id": "constructor_autotrack_url",
+        "label": "Autotrack beacon script URL",
+        "info": "Your customer-specific data-driven tracking bundle from Constructor (e.g. https://cnstrc.com/js/cust/your-index_XXXXXX.js). Leave blank to skip loading it.",
+        "default": ""
+      },
+      {
+        "type": "header",
+        "content": "Powered surfaces"
+      },
+      {
+        "type": "paragraph",
+        "content": "Toggle which storefront surfaces Constructor renders. Disabled surfaces fall back to the native Shopify behavior."
+      },
+      {
+        "type": "checkbox",
+        "id": "constructor_autocomplete_enabled",
+        "label": "Autocomplete / predictive search",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "constructor_search_enabled",
+        "label": "Search results page",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "constructor_browse_enabled",
+        "label": "Collection / browse pages",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "constructor_recommendations_enabled",
+        "label": "Recommendations",
+        "default": true
+      },
+      {
+        "type": "header",
+        "content": "Recommendation pods"
+      },
+      {
+        "type": "paragraph",
+        "content": "Pod IDs come from Constructor dashboard → Recommendations. They are index-specific. Leave a field blank to hide that pod."
+      },
+      {
+        "type": "text",
+        "id": "constructor_pod_home",
+        "label": "Home page pod ID",
+        "default": "home-page"
+      },
+      {
+        "type": "text",
+        "id": "constructor_pod_plp",
+        "label": "Collection / browse (PLP) pod ID",
+        "default": "plp"
+      },
+      {
+        "type": "text",
+        "id": "constructor_pod_pdp",
+        "label": "Product page pod ID",
+        "default": "pdp"
+      },
+      {
+        "type": "text",
+        "id": "constructor_pod_cart",
+        "label": "Cart pod ID",
+        "default": ""
+      },
+      {
+        "type": "text",
+        "id": "constructor_pod_autocomplete",
+        "label": "Autocomplete zero-state pod ID",
+        "info": "Trending products shown when the search box is focused but empty. Reuses the home page pod by default.",
+        "default": "home-page"
+      },
+      {
+        "type": "header",
+        "content": "Catalog mapping"
+      },
+      {
+        "type": "paragraph",
+        "content": "How product identifiers in your Constructor index map to Shopify. 'Product' maps Constructor item IDs to Shopify product IDs (default when you index products). Adjust only if your feed uses a different key."
+      },
+      {
+        "type": "select",
+        "id": "constructor_item_id_source",
+        "label": "Constructor item id = Shopify",
+        "options": [
+          { "value": "product_id", "label": "Product ID" },
+          { "value": "variant_id", "label": "Variant ID" },
+          { "value": "handle", "label": "Product handle" },
+          { "value": "sku", "label": "Variant SKU" }
+        ],
+        "default": "product_id"
+      }
+    ]
   }
 ]

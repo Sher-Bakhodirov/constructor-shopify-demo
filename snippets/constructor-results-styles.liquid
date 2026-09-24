@@ -1,0 +1,154 @@
+{% doc %}
+  Styles for Constructor-powered results (search / browse) and their cards.
+  Uses Horizon's CSS custom properties so it inherits the store's theme tokens.
+{% enddoc %}
+
+{% stylesheet %}
+  constructor-results {
+    display: block;
+  }
+
+  .cnstrc-results {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--gap-lg, 2rem);
+  }
+
+  @media screen and (min-width: 750px) {
+    .cnstrc-results--with-facets {
+      grid-template-columns: 220px 1fr;
+    }
+  }
+
+  .cnstrc-results__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--gap-sm, 1rem);
+    flex-wrap: wrap;
+    margin-block-end: var(--margin-md, 1rem);
+  }
+
+  .cnstrc-results__title {
+    font-size: var(--font-size--lg, 1.25rem);
+    margin: 0;
+  }
+
+  .cnstrc-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--gap-md, 1.5rem);
+  }
+
+  @media screen and (min-width: 750px) {
+    .cnstrc-grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  .cnstrc-card {
+    display: flex;
+    flex-direction: column;
+    text-align: start;
+    position: relative;
+  }
+
+  .cnstrc-card__link {
+    color: inherit;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+  }
+
+  .cnstrc-card__media {
+    aspect-ratio: 1 / 1;
+    background: var(--color-background-subdued, #f4f4f4);
+    border-radius: var(--card-corner-radius, 8px);
+    overflow: hidden;
+    margin-block-end: var(--margin-xs, 0.5rem);
+  }
+
+  .cnstrc-card__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .cnstrc-card__title {
+    font-size: var(--font-size--sm, 0.9375rem);
+    line-height: 1.3;
+    margin-block-end: 0.25rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .cnstrc-card__price {
+    font-weight: 600;
+    margin-block-end: var(--margin-2xs, 0.5rem);
+  }
+
+  .cnstrc-card__atc {
+    margin-block-start: auto;
+    width: 100%;
+  }
+
+  .cnstrc-facets {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-md, 1.5rem);
+  }
+
+  .cnstrc-facet__title {
+    font-size: var(--font-size--sm, 0.9375rem);
+    margin: 0 0 0.5rem;
+  }
+
+  .cnstrc-facet__options {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .cnstrc-facet__option label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    font-size: var(--font-size--sm, 0.9375rem);
+  }
+
+  .cnstrc-facet__count {
+    color: var(--color-foreground-subdued, #767676);
+    margin-inline-start: auto;
+  }
+
+  .cnstrc-results__toolbar {
+    display: flex;
+    gap: var(--gap-sm, 1rem);
+    align-items: center;
+  }
+
+  .cnstrc-results__status {
+    padding: var(--padding-lg, 2rem) 0;
+    color: var(--color-foreground-subdued, #767676);
+  }
+
+  constructor-results[data-state='ready'] .cnstrc-results__status {
+    display: none;
+  }
+
+  .cnstrc-load-more {
+    margin: var(--margin-lg, 2rem) auto 0;
+    display: block;
+  }
+
+  .cnstrc-load-more[hidden] {
+    display: none;
+  }
+{% endstylesheet %}

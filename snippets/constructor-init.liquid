@@ -1,0 +1,102 @@
+{% doc %}
+  Bootstraps Constructor.io for the storefront.
+
+  Responsibilities:
+  - Sets the `window.cnstrc` global that the autotrack beacon reads (index key,
+    logged-in user id, purchase data on the order-status page).
+  - Exposes theme settings to the client modules via `window.ConstructorTheme.config`.
+  - Loads the customer-specific autotrack beacon script (data-driven tracking).
+
+  Rendered once from `layout/theme.liquid` inside <head>, before other scripts so
+  the config global exists when modules initialize.
+{% enddoc %}
+
+{%- liquid
+  assign cnstrc_key = settings.constructor_index_key | strip
+  assign cnstrc_ready = false
+  if settings.constructor_enabled and cnstrc_key != blank and cnstrc_key != 'REPLACE_WITH_YOUR_INDEX_KEY'
+    assign cnstrc_ready = true
+  endif
+-%}
+
+{%- if cnstrc_ready -%}
+  <script>
+    window.cnstrc = window.cnstrc || {};
+    window.cnstrc.indexKey = {{ cnstrc_key | json }};
+
+    {%- comment -%}
+      Logged-in personalization: Constructor expects an obfuscated (hashed) user id,
+      never PII. We hash the customer email with SHA-256 client-side before setting it.
+    {%- endcomment -%}
+    {%- if customer -%}
+      (function () {
+        var email = {{ customer.email | json }};
+        if (!email || !window.crypto || !window.crypto.subtle) return;
+        var data = new TextEncoder().encode(email);
+        window.crypto.subtle.digest('SHA-256', data).then(function (buf) {
+          var hex = Array.prototype.map
+            .call(new Uint8Array(buf), function (b) { return b.toString(16).padStart(2, '0'); })
+            .join('');
+          window.cnstrc.userId = hex;
+        }).catch(function () {});
+      })();
+    {%- endif -%}
+
+    {%- comment -%}
+      Purchase tracking. On a themeable order page (customers/order) we surface the
+      order as purchaseData so the beacon can fire a conversion. Constructor de-dupes
+      by order_id, so re-viewing the order will not double count.
+    {%- endcomment -%}
+    {%- if order -%}
+      window.cnstrc.purchaseData = {
+        order_id: {{ order.order_number | json }},
+        revenue: {{ order.total_price | divided_by: 100.0 | json }},
+        items: [
+          {%- for line in order.line_items -%}
+            {
+              item_id: {{ line.product_id | json }},
+              variation_id: {{ line.variant_id | json }},
+              item_name: {{ line.product.title | json }},
+              price: {{ line.final_price | divided_by: 100.0 | json }},
+              quantity: {{ line.quantity | json }}
+            }{%- unless forloop.last -%},{%- endunless -%}
+          {%- endfor -%}
+        ]
+      };
+    {%- endif -%}
+
+    window.ConstructorTheme = window.ConstructorTheme || {};
+    window.ConstructorTheme.config = {
+      enabled: true,
+      indexKey: {{ cnstrc_key | json }},
+      surfaces: {
+        autocomplete: {{ settings.constructor_autocomplete_enabled | json }},
+        search: {{ settings.constructor_search_enabled | json }},
+        browse: {{ settings.constructor_browse_enabled | json }},
+        recommendations: {{ settings.constructor_recommendations_enabled | json }}
+      },
+      pods: {
+        home: {{ settings.constructor_pod_home | strip | json }},
+        plp: {{ settings.constructor_pod_plp | strip | json }},
+        pdp: {{ settings.constructor_pod_pdp | strip | json }},
+        cart: {{ settings.constructor_pod_cart | strip | json }},
+        autocomplete: {{ settings.constructor_pod_autocomplete | strip | json }}
+      },
+      itemIdSource: {{ settings.constructor_item_id_source | json }},
+      routes: {
+        search: {{ routes.search_url | json }},
+        cartAdd: {{ routes.cart_add_url | append: '.js' | json }}
+      }
+    };
+  </script>
+
+  {%- assign beacon_url = settings.constructor_autotrack_url | strip -%}
+  {%- if beacon_url != blank -%}
+    <script src="{{ beacon_url }}" async></script>
+  {%- endif -%}
+{%- else -%}
+  <script>
+    window.ConstructorTheme = window.ConstructorTheme || {};
+    window.ConstructorTheme.config = { enabled: false };
+  </script>
+{%- endif -%}

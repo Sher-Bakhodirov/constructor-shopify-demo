@@ -34,6 +34,39 @@
 <div
   class="section-background{% if section.settings.background_color != blank %} color-custom-{{ section.id }}{% endif %}"
 ></div>
+
+{%- if settings.constructor_enabled and settings.constructor_browse_enabled -%}
+  {% render 'constructor-results-styles' %}
+  <script src="{{ 'constructor-results.js' | asset_url }}" type="module" fetchpriority="low"></script>
+
+  {%- comment -%}
+    Browse listing maps to a Constructor group_id. Default: the Shopify collection
+    handle (per integration decision). Filter name is configurable via metafield if
+    needed later.
+  {%- endcomment -%}
+  <constructor-results
+    mode="browse"
+    filter-name="group_id"
+    filter-value="{{ collection.handle }}"
+    class="section spacing-style"
+    style="--padding-block-start: {{ section.settings.padding-block-start }}px; --padding-block-end: {{ section.settings.padding-block-end }}px;"
+  >
+    <div class="cnstrc-results cnstrc-results--with-facets">
+      <aside data-cnstrc-facets class="cnstrc-facets"></aside>
+      <div>
+        <div class="cnstrc-results__header">
+          <h1 data-cnstrc-title class="cnstrc-results__title">{{ collection.title }}</h1>
+          <div class="cnstrc-results__toolbar">
+            <div data-cnstrc-sort></div>
+          </div>
+        </div>
+        <div data-cnstrc-status class="cnstrc-results__status" role="status" aria-live="polite"></div>
+        <div data-cnstrc-grid class="cnstrc-grid"></div>
+        <button type="button" data-cnstrc-load-more class="button cnstrc-load-more" hidden></button>
+      </div>
+    </div>
+  </constructor-results>
+{%- else -%}
 {% # theme-check-disable-next-line UnknownFilter %}
 <collection-component view-event-payload="{{ collection | standard_event_data: 'view' | escape }}">
   <results-list
@@ -91,6 +124,7 @@
     </div>
   </results-list>
 </collection-component>
+{%- endif -%}
 
 {% schema %}
 {

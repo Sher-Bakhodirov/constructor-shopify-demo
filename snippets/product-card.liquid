@@ -8,6 +8,7 @@
   @param {object} [block] - The block object
   @param {number} [product_card_gap] - The gap between the product card children (overrides block settings)
   @param {string} [product_view_context] - The context in which the product card is being rendered. Used for standard events.
+  @param {string} [constructor_recommendation] - When set, marks this card as a Constructor recommendation result and carries the strategy id (data-driven tracking).
 {%- enddoc -%}
 
 {% assign block_settings = block.settings %}
@@ -76,6 +77,7 @@
   {%- unless onboarding -%}
     {% # theme-check-disable-next-line UnknownFilter %}
     view-event-payload="{{ product | standard_event_data: 'view', context: product_view_context | escape }}"
+    {% render 'constructor-item-attrs', product: product, recommendation: constructor_recommendation %}
   {%- endunless -%}
 >
   <a

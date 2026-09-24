@@ -35,6 +35,9 @@
     {% if data_testid %}
       data-testid="{{ data_testid }}"
     {% endif %}
+    {% if settings.constructor_enabled %}
+      data-cnstrc-btn="add_to_cart"
+    {% endif %}
     {% unless can_add_to_cart %}
       disabled
     {% endunless %}
