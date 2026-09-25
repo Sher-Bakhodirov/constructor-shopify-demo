@@ -103,6 +103,7 @@
     "variant_button_radius": 14,
     "variant_button_width": "equal-width-buttons",
     "constructor_enabled": true,
+    "constructor_item_id_source": "handle",
     "content_for_index": [],
     "color_palette": {
       "background": "#ffffff",
