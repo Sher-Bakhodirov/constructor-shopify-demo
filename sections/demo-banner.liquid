@@ -1,0 +1,292 @@
+{% comment %}
+  Rounded, centered banner from the Constructor React reference storefront. The
+  dark style is the home hero; the light style is the promo banner.
+{% endcomment %}
+
+{%- liquid
+  assign style = section.settings.style
+-%}
+
+<div
+  class="section section--page-width spacing-style"
+  style="{% render 'spacing-style', settings: section.settings %}"
+>
+  <div class="demo-banner demo-banner--{{ style }}">
+    {%- if section.settings.eyebrow != blank -%}
+      <p class="demo-banner__eyebrow">{{ section.settings.eyebrow }}</p>
+    {%- endif -%}
+    {%- if section.settings.heading != blank -%}
+      {%- if section.index == 1 -%}
+        <h1 class="demo-banner__heading">{{ section.settings.heading }}</h1>
+      {%- else -%}
+        <h2 class="demo-banner__heading">{{ section.settings.heading }}</h2>
+      {%- endif -%}
+    {%- endif -%}
+    {%- if section.settings.text != blank -%}
+      <p class="demo-banner__text">{{ section.settings.text }}</p>
+    {%- endif -%}
+
+    {%- if section.settings.button_label != blank or section.settings.button_label_2 != blank -%}
+      <div class="demo-banner__actions">
+        {%- if section.settings.button_label != blank -%}
+          <a class="demo-banner__button demo-banner__button--primary" href="{{ section.settings.button_link | default: routes.all_products_collection_url }}">
+            {{- section.settings.button_label -}}
+          </a>
+        {%- endif -%}
+        {%- if section.settings.button_label_2 != blank -%}
+          <a class="demo-banner__button demo-banner__button--secondary" href="{{ section.settings.button_link_2 | default: routes.collections_url }}">
+            {{- section.settings.button_label_2 -}}
+          </a>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+{% stylesheet %}
+  .demo-banner {
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+    border-radius: var(--demo-radius-3xl, 1.5rem);
+  }
+
+  .demo-banner > * {
+    position: relative;
+  }
+
+  .demo-banner--dark {
+    background-color: var(--demo-stone-900, #1c1917);
+    padding: 5rem 2rem;
+  }
+
+  .demo-banner--dark::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: linear-gradient(to bottom right, rgb(41 37 36 / 0.5), transparent);
+  }
+
+  .demo-banner--light {
+    border: 1px solid var(--demo-stone-200, #e7e5e4);
+    background-image: linear-gradient(to bottom, var(--demo-stone-50, #fafaf9), #fff);
+    padding: 2.5rem;
+  }
+
+  @media screen and (min-width: 768px) {
+    .demo-banner--dark {
+      padding-block: 8rem;
+    }
+
+    .demo-banner--light {
+      padding: 4rem;
+    }
+  }
+
+  .demo-banner__eyebrow {
+    margin: 0 0 1rem;
+    font-size: 0.875rem;
+    font-weight: 300;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--demo-stone-400, #a8a29e);
+  }
+
+  .demo-banner--light .demo-banner__eyebrow {
+    margin-bottom: 0.75rem;
+    font-weight: 400;
+    letter-spacing: 0.2em;
+  }
+
+  .demo-banner__heading {
+    margin: 0 0 1.5rem;
+    font-family: var(--font-body--family);
+    font-size: 2.25rem;
+    line-height: 1.1;
+    font-weight: 300;
+    letter-spacing: -0.025em;
+    color: #fff;
+  }
+
+  .demo-banner--light .demo-banner__heading {
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+    letter-spacing: normal;
+    color: var(--demo-stone-800, #292524);
+  }
+
+  @media screen and (min-width: 768px) {
+    .demo-banner__heading {
+      font-size: 3.75rem;
+    }
+
+    .demo-banner--light .demo-banner__heading {
+      font-size: 1.875rem;
+    }
+  }
+
+  .demo-banner__text {
+    max-width: 36rem;
+    margin: 0 auto 2.5rem;
+    font-size: 1.125rem;
+    font-weight: 300;
+    color: var(--demo-stone-300, #d6d3d1);
+  }
+
+  .demo-banner--light .demo-banner__text {
+    max-width: 28rem;
+    margin-bottom: 2rem;
+    font-size: 1rem;
+    font-weight: 400;
+    color: var(--demo-stone-500, #78716c);
+  }
+
+  .demo-banner__actions {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1rem;
+  }
+
+  @media screen and (min-width: 640px) {
+    .demo-banner__actions {
+      flex-direction: row;
+    }
+  }
+
+  .demo-banner__button {
+    display: inline-block;
+    padding: 1rem 2.5rem;
+    border: 1px solid transparent;
+    font-weight: 500;
+    letter-spacing: 0.025em;
+    text-decoration: none;
+    transition: all 300ms ease;
+  }
+
+  .demo-banner--dark .demo-banner__button--primary {
+    background-color: #fff;
+    color: var(--demo-stone-900, #1c1917);
+  }
+
+  .demo-banner--dark .demo-banner__button--primary:hover {
+    background-color: var(--demo-stone-100, #f5f5f4);
+  }
+
+  .demo-banner--dark .demo-banner__button--secondary {
+    border-color: var(--demo-stone-500, #78716c);
+    color: #fff;
+  }
+
+  .demo-banner--dark .demo-banner__button--secondary:hover {
+    border-color: #fff;
+    background-color: #fff;
+    color: var(--demo-stone-900, #1c1917);
+  }
+
+  .demo-banner--light .demo-banner__button--primary {
+    background-color: var(--demo-stone-900, #1c1917);
+    color: #fff;
+  }
+
+  .demo-banner--light .demo-banner__button--primary:hover {
+    background-color: var(--demo-stone-800, #292524);
+  }
+
+  .demo-banner--light .demo-banner__button--secondary {
+    border-color: var(--demo-stone-300, #d6d3d1);
+    color: var(--demo-stone-800, #292524);
+  }
+
+  .demo-banner--light .demo-banner__button--secondary:hover {
+    border-color: var(--demo-stone-900, #1c1917);
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Demo banner",
+  "tag": "section",
+  "class": "section-wrapper",
+  "settings": [
+    {
+      "type": "select",
+      "id": "style",
+      "label": "Style",
+      "options": [
+        { "value": "dark", "label": "Dark (hero)" },
+        { "value": "light", "label": "Light (promo)" }
+      ],
+      "default": "dark"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Curated Collection"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Integrations"
+    },
+    {
+      "type": "text",
+      "id": "text",
+      "label": "Text",
+      "default": "Timeless pieces crafted for the modern wardrobe."
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Primary button label",
+      "default": "Explore Collection"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Primary button link"
+    },
+    {
+      "type": "text",
+      "id": "button_label_2",
+      "label": "Secondary button label"
+    },
+    {
+      "type": "url",
+      "id": "button_link_2",
+      "label": "Secondary button link"
+    },
+    {
+      "type": "header",
+      "content": "t:content.padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "t:settings.top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "t:settings.bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 64
+    }
+  ],
+  "presets": [
+    {
+      "name": "Demo banner"
+    }
+  ]
+}
+{% endschema %}
