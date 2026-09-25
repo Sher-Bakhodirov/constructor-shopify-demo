@@ -330,19 +330,19 @@
     "1790255310b9435317": {
       "type": "_blocks",
       "blocks": {
-        "constructor_connect_recommendations_nMiJUQ": {
-          "type": "shopify://apps/constructor-connect/blocks/recommendations/a956b874-8151-438f-8f0b-c7ae709947b1",
+        "constructor_recommendations_pdp": {
+          "type": "constructor-recommendations",
           "settings": {
-            "enable_default_styles": true,
-            "version": "1.0.0",
-            "index_key": "key_QXcSdast8nnuNbsp",
             "pod_id": "pdp",
-            "options_json": "{}"
+            "subheading": "",
+            "num_results": 12,
+            "padding-block-start": 0,
+            "padding-block-end": 0
           }
         }
       },
       "block_order": [
-        "constructor_connect_recommendations_nMiJUQ"
+        "constructor_recommendations_pdp"
       ],
       "settings": {
         "content_direction": "column",

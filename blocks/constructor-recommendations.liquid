@@ -1,0 +1,138 @@
+{%- doc -%}
+  Constructor-powered recommendations pod, rendered by Constructor's Recommendations
+  UI library (bundled build). See `assets/constructor-recommendations.js`.
+
+  On a product page the current product is sent as the seed item, so
+  item-based strategies (similar / bought together) work.
+{%- enddoc -%}
+
+{%- liquid
+  assign pod_id = block.settings.pod_id | strip
+  if pod_id == blank
+    assign pod_id = settings.constructor_pod_pdp | strip
+  endif
+  assign seed_product = closest.product
+
+  if seed_product != blank
+    case settings.constructor_item_id_source
+      when 'variant_id'
+        assign seed_item_id = seed_product.selected_or_first_available_variant.id
+      when 'handle'
+        assign seed_item_id = seed_product.handle
+      when 'sku'
+        assign seed_item_id = seed_product.selected_or_first_available_variant.sku
+      else
+        assign seed_item_id = seed_product.id
+    endcase
+  endif
+-%}
+
+{%- if settings.constructor_enabled and settings.constructor_recommendations_enabled and pod_id != blank -%}
+  <script src="{{ 'constructor-recommendations.js' | asset_url }}" type="module" fetchpriority="low"></script>
+
+  <div
+    class="constructor-recommendations spacing-style"
+    style="{% render 'spacing-style', settings: block.settings %}"
+    {{ block.shopify_attributes }}
+  >
+    <div
+      id="cio-recs-{{ block.id }}"
+      data-cnstrc-recommendations-mount
+      data-pod-id="{{ pod_id | escape }}"
+      data-num-results="{{ block.settings.num_results }}"
+      {% if seed_item_id != blank %}
+        data-item-id="{{ seed_item_id | escape }}"
+      {% endif %}
+      {% if block.settings.subheading != blank %}
+        data-subheading="{{ block.settings.subheading | escape }}"
+      {% endif %}
+    ></div>
+  </div>
+{%- elsif request.design_mode -%}
+  <div class="constructor-recommendations constructor-recommendations--placeholder" {{ block.shopify_attributes }}>
+    Enable Constructor.io recommendations in Theme settings → Constructor.io and set a pod ID to show this block.
+  </div>
+{%- endif -%}
+
+{% stylesheet %}
+  .constructor-recommendations {
+    width: 100%;
+  }
+
+  .constructor-recommendations [data-cnstrc-recommendations-mount] {
+    min-height: 1px;
+  }
+
+  /* Inherit the theme's typography instead of the library's bundled Inter font. */
+  .constructor-recommendations .cio-recommendations,
+  .constructor-recommendations .cio-components {
+    font-family: var(--font-body--family, inherit);
+    color: var(--color-foreground, inherit);
+  }
+
+  .constructor-recommendations--placeholder {
+    padding: 2rem;
+    text-align: center;
+    border: 1px dashed rgb(var(--color-foreground-rgb) / 0.3);
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Constructor recommendations",
+  "tag": null,
+  "settings": [
+    {
+      "type": "text",
+      "id": "pod_id",
+      "label": "Pod ID",
+      "info": "From Constructor dashboard → Recommendations. Leave blank to use the product page pod ID from Theme settings → Constructor.io."
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "info": "Optional text under the pod title. The title itself comes from the pod's display name in Constructor."
+    },
+    {
+      "type": "range",
+      "id": "num_results",
+      "label": "Number of products",
+      "min": 2,
+      "max": 24,
+      "step": 1,
+      "default": 12
+    },
+    {
+      "type": "header",
+      "content": "t:content.padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "t:settings.top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "t:settings.bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "Constructor recommendations",
+      "category": "Constructor.io"
+    }
+  ]
+}
+{% endschema %}
